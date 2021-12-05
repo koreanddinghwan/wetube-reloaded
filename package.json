@@ -7,7 +7,7 @@
     "url": "git+https://github.com/koreanddinghwan/wetube-reloaded.git"
   },
   "scripts": {
-    "win": "node index.js"
+    "dev": "nodemon --exec babel-node index.js"
   },
   "author": "Kang MyungHwan<myunghwan0421@gmail.com>",
   "license": "MIT",
@@ -17,5 +17,11 @@
   "homepage": "https://github.com/koreanddinghwan/wetube-reloaded#readme",
   "dependencies": {
     "express": "^4.17.1"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.16.0",
+    "@babel/node": "^7.16.0",
+    "@babel/preset-env": "^7.16.4",
+    "nodemon": "^2.0.15"
   }
 }
