@@ -2,10 +2,12 @@
   "name": "wetube",
   "version": "1.0.0",
   "description": "way to watch videos",
-  "main": "index.js",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/koreanddinghwan/wetube-reloaded.git"
+  },
+  "scripts": {
+    "win": "node index.js"
   },
   "author": "Kang MyungHwan<myunghwan0421@gmail.com>",
   "license": "MIT",
