@@ -1,7 +1,7 @@
 {
   "name": "wetube",
   "version": "1.0.0",
-  "description": "way to watch videos",
+  "description": "way to watch videos!",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/koreanddinghwan/wetube-reloaded.git"
