@@ -3,14 +3,21 @@ import morgan from "morgan";
 import globalRouter from "./routers/globalRouter";
 import videoRouter from "./routers/videoRouter";
 import userRouter from "./routers/userRouter";
+
 const PORT = 4001;
 
 const app = express(); //어플만들기, express함수 호출하면 express application사용가능하게 return해준다.
 const logger = morgan("dev");
+
+// pug 사용
 app.set("view engine", "pug");
-app.set("views", process.cwd() + "/src/views");
+app.set("views", process.cwd() + "/src/views"); //pug 루트디렉터리설정
+
 //morgan import
 app.use(logger);
+
+//urlencoded 미들웨어 추가
+app.use(express.urlencoded({ extended: true }));
 
 app.use("/", globalRouter);
 app.use("/videos", videoRouter);

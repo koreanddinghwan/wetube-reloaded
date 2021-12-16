@@ -1,5 +1,3 @@
-import res from "express/lib/response";
-
 const Join = (req, res) => res.send("Join here");
 const EditUser = (req, res) => res.send("Edit user");
 const DeleteUser = (req, res) => res.send("Delete user");

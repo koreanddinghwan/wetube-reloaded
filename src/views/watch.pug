@@ -1,5 +1,12 @@
 extends base.pug
 
-
 block content 
-    h1 Watch videos
+
+    h3 #{video.views === '1'? video.views + 'view': video.views + 'views'}
+
+    //- /가 있고 없고에 따라 상대경로냐 절대경로냐가 나뉜다.
+    a(href=`${video.id}/edit`) Edit Video &rarr;
+
+
+
+

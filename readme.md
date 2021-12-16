@@ -786,3 +786,60 @@ block content
 
 each로 iterate하고 있는 객체에 각각 `video mixin`을 적용한다.  
 그리고 각각의 `video mixin`은 html 객체를 리턴할 것이다.
+
+# 6 MONGODB & MONGOOSE
+
+## 6.0
+
+DB를 구축하기전에, 어떻게 DB에 데이터를 보낼 것인가가에 대해서 먼저 다룬다.
+
+먼저 알아야하는건 우리가 지금까지 `get`만 하고 있다는 것.
+
+`get`은 URL 파라미터나 URL 쿼리로데이터를 보냈는데, `post`는 http 패킷의 body안에 담아서 보낸다. 자세한 비교는 블로그 글 참고
+
+단순 사용을 비교하자면 `get`은 사용자의 요청에 대해 단순히 서버상에서 데이터를 보내주고, 보여줘야할때만 사용하고, `post`는 서버상에서 데이터를 조작해야할때 사용한다.
+
+- 사용자가 작성한 글을 저장->post
+- 사용자가 '/home'페이지를 요청 -> get
+- 사용자가 작성한 글을 수정하고자함 -> post
+
+일단 post방식으로 데이터를 조작하는걸 연습해보자
+
+DB를 구축하기 전에 `video`배열을 fake DB로 사용하자.
+
+`videos`데이터를 let으로 바꾸어 수정가능하게하고, home 페이지에서 모든 비디오가 렌더링되게하자.
+
+`form 태그에서 action이 중요한 이유는 Ajax통신의 메서드를 정할 수 있다는 것!!이다.`  
+form이 어떤 메서드를 가지냐에따라 이 방식이 달라져용~~
+
+form의 메서드를 post로 바꿔주면 post request를 서버에 날리는데, 서버가 이걸 받아주기 위해선
+
+`videoRouter.post("/:id(\\d+)/edit", postEdit);` 해당 경로로 post를 받고, 함수를 실행하게 해줘야하고,
+
+```js
+export const postEdit = (req, res) => {
+  ...
+};
+```
+
+함수를 정의해줘야한다.
+
+이제 받은 정보를 어떻게 할 것인가가 문제다.
+
+입력한 데이터를 담고있는 건 req.body이다.
+
+```
+Contains key-value pairs of data submitted in the request body. By default, it is undefined, and is populated when you use body-parsing middleware such as express.json() or express.urlencoded().
+```
+
+`key-value 형태로 submit된 data를 받는데, key값은 form 태그 내에서 value를 가지는 태그들의 name, 그리고 value값은 이 태그들의 value값들이다.`
+
+초기값으로 undefined되어있기 때문에, `body-parsing middleware`를 사용해야한다.
+
+업데이트하기위해선
+
+```js
+const { title } = req.body.title;
+
+videos[id - 1].title = title;
+```
