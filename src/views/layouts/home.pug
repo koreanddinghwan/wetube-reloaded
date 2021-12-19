@@ -1,0 +1,16 @@
+extends default.pug 
+include ../mixins/videos.pug
+
+
+block content 
+    h1 Hello, Here's for you
+
+    each video in videos 
+        +videos(video)
+
+    else 
+        h2 sorry not found
+
+
+    h2 
+        a(href="videos/upload") Or, Upload your video &rarr;

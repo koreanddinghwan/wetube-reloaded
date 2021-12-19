@@ -1,0 +1,18 @@
+extends default.pug 
+
+
+block content 
+    #videos 
+        h1=video.title
+        div 
+            small=video.meta.views
+            small=video.meta.rating
+        h3= video.description
+        p=video.hashtags
+        small=video.creationAt
+
+    #video_control
+    hr
+    a(href=`${video.id}/edit`) Edit this video
+    br
+    a(href=`${video.id}/delete`) Delete this video

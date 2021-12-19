@@ -1,0 +1,15 @@
+extends default.pug 
+include ../mixins/videos.pug
+
+
+block content
+    h1 Search Videos here 
+
+    form(method="GET")
+        input(type="text" name="keyword" required placeholder="Search by title")
+        input(type="submit" value="Search")
+
+    each video in videos 
+        +videos(video)
+    else 
+        span No videos

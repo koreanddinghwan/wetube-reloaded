@@ -1,0 +1,19 @@
+//- default
+doctype html 
+html(lang="ko")
+    head 
+    body 
+        title #{pageTitle} | wetube
+
+        <link rel="stylesheet" href="https://unpkg.com/mvp.css">
+
+        #nav 
+            div 
+                a(href="/")="HOME"
+                a(href="/join")="JOIN"
+                a(href="/search")="SEARCH"
+
+        #main
+            block content
+
+    include ../includes/footer.pug

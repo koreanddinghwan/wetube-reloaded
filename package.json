@@ -1,0 +1,32 @@
+{
+  "name": "wetube",
+  "version": "1.0.0",
+  "description": "Youtube clone with nodejs, express, pug, scss",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nodemon --exec babel-node src/init.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/koreanddinghwan/wetube-reloaded.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/koreanddinghwan/wetube-reloaded/issues"
+  },
+  "homepage": "https://github.com/koreanddinghwan/wetube-reloaded#readme",
+  "dependencies": {
+    "express": "^4.17.2",
+    "mongoose": "^6.1.2",
+    "morgan": "^1.10.0",
+    "pug": "^3.0.2",
+    "qs": "^6.10.2"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.16.5",
+    "@babel/node": "^7.16.5",
+    "@babel/preset-env": "^7.16.5",
+    "nodemon": "^2.0.15"
+  }
+}
