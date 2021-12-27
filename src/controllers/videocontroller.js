@@ -17,7 +17,7 @@ export const Watchvideo = async (req, res) => {
     const video = await Video.findById(id);
     res.render("Watchvideo", { pageTitle: "Watch", video });
   } catch {
-    return res.render("404", { pageTitle: "404" });
+    return res.status(404).render("404", { pageTitle: "404" });
   }
 };
 
@@ -35,7 +35,7 @@ export const Postuploadvideo = async (req, res) => {
     });
     return res.redirect("/");
   } catch (error) {
-    return res.render("upload", {
+    return res.status(400).render("upload", {
       pageTitle: "upload",
       errormessage: error._message,
     });

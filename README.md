@@ -843,3 +843,339 @@ const { title } = req.body.title;
 
 videos[id - 1].title = title;
 ```
+
+# 7 요약
+
+## User db 스키마 생성, 해쉬화
+
+### db 스키마 설정
+
+```js
+import mongoose from "mongoose";
+
+//userdata schema
+const userSchema = new mongoose.Schema({
+  email: { type: String, required: true, unique: true },
+  username: { type: String, required: true, unique: true },
+  password: { type: String, required: true },
+  name: { type: String, required: true },
+  location: String,
+});
+```
+
+### 해쉬화(bycryptjs)
+
+```js
+import bcryptjs from "bcryptjs";
+//유저가 create한 password를 저장하기전에 hash화한다.
+//bcryptjs.hash(this.password, saltRound)
+userSchema.pre("save", async function () {
+  //여기서 this는 lexical 하게 이 함수가 호출된 scope에서의 this를 의미.
+  this.password = await bcryptjs.hash(this.password, 5);
+});
+
+//schema model object
+const User = mongoose.model("User", userSchema);
+
+export default User;
+```
+
+## join 라우트 생성, 페이지, 함수 정의
+
+### route
+
+```js
+rootRouter.route("/join").get(getJoin).post(postJoin); //get,post로 전송
+```
+
+### view
+
+```pug
+extends default.pug
+
+block content
+    h2 #{pageTitle}
+    if errorMessage
+        span=errorMessage
+    //- join페이지
+    #login-form
+        h3 Login here
+        form(method="POST")
+            input(name="email", type="text", required, placeholder="email")
+            input(name="username", type="text", required, placeholder="username")
+            input(name="password", type="text", required, placeholder="password")
+            input(name="confirmpassword", type="text", required, placeholder="retype password")
+            input(name="name", type="text", required, placeholder="name")
+            input(name="location", type="text", required, placeholder="location")
+            input(type="submit" value= "join", placeholder="submit")
+        hr
+        div
+            span Already Have an Account?
+            a(href="/login") Log in Now &rarr;
+```
+
+### 함수
+
+```js
+export const getJoin = (req, res) => {
+  return res.render("join", { pageTitle: "JOIN" });
+};
+
+export const postJoin = async (req, res) => {
+  const { name, username, email, password, confirmpassword, location } =
+    req.body; //post method로 넘어오는 req의 body에 정보가 담겨있음.
+  const pageTitle = "Join";
+
+  //password check
+  if (password !== confirmpassword) {
+    return res.status(400).render(pageTitle, {
+      pageTitle,
+      errorMessage: "password not true",
+    });
+  }
+  //username/email check
+  const exist = await User.exists({ $or: [{ username }, { email }] }); //or 연산자는 2개중에 하나라도 있으면 중복된다는 것을 의미, 오류발생
+  if (exist) {
+    return res.status(400).render(pageTitle, {
+      pageTitle,
+      errorMessage: "username/email already exists",
+    });
+  }
+
+  //db에 새로운 데이터를 생성.
+  try {
+    await User.create({
+      name,
+      username,
+      email,
+      password,
+      location,
+    });
+    return res.redirect("/login");
+  } catch (error) {
+    return res.status(400).render(pageTitle, {
+      pageTitle,
+      errorMessage: error._message,
+    });
+  }
+};
+```
+
+## Login 라우트, 뷰, 함수정의
+
+### 라우트
+
+```js
+rootRouter.route("/login").get(getLogin).post(postLogin);
+```
+
+### 뷰
+
+```pug
+extends default.pug
+
+block content
+    h2 #{pageTitle}
+    if errorMessage
+        span=errorMessage
+    #login-form
+        h3 Login here
+        div
+            form(method="POST")
+                input(type="text" name="username" required placeholder="Your id here")
+                input(type="text" name="password" required placeholder="Your password here")
+                input(type="submit" value="로그인")
+
+        hr
+        div
+            span Don't Have an Account?
+            a(href="/join") Create now &rarr;
+```
+
+### 함수
+
+```js
+export const getLogin = (req, res) => {
+  return res.render("login", { pageTitle: "Login" });
+};
+export const postLogin = async (req, res) => {
+  const { username, password } = req.body;
+  const pageTitle = "login";
+  //check account exist
+  const user = await User.findOne({ username });
+  if (!user) {
+    return res.status(400).render(pageTitle, {
+      pageTitle,
+      errorMessage: "Can not find username",
+    });
+  }
+  //check if password exist
+  const ok = await bcryptjs.compare(password, user.password);
+  if (!ok) {
+    return res.status(400).render(pageTitle, {
+      pageTitle,
+      errorMessage: "Wrong Password",
+    });
+  }
+
+  console.log("User Logged in");
+  return res.redirect("/");
+};
+```
+
+## 세션
+
+유저가 로그인한 상태를 유지하기 위해선 session이라는 개념을 알아야함.
+
+`npm i express-session`
+
+session 미들웨어를 사용해야한다.
+
+이 미들웨어는 유저가 새로고침하면 서버에 다시 요청을 보내는데, 이때 이 미들웨어를 반드시 거치게된다.
+
+이 미들웨어는 각각의 브라우저의 임의의 텍스트로 id를 부여한다.
+
+서버가 각 브라우저의 세션마다 다른 id를 부여하기에 브라우저가 요청을 보낼때마다 쿠키에서 세션id를 가져와서 보내고, 서버가 그 id를 읽고 어떤 브라우저인지 특정할 수 있다.
+
+각 브라우저마다 다른 세션을 갖고 있기 때문에, 각각 다른 세션id를 가지고있고, 서버가 이 세션 id에 대해 각각 다른 데이터를 부여할 수 있다.
+
+세션의 개념은 쿠키와는 달리, 데이터를 서버측에 저장하므로, 쿠키보다 안전하다고 할 수 있다.
+
+session의 id는 cookie에 저장되지만, session data는 서버측에 저장된다는 것을 기억해야한다.  
+그래서 이 session id를 키값으로 서버츠겡서 session data를 찾아내 사용자에게 정보를 제공할 수 있다.
+
+### 세션 미들웨어 사용
+
+```js
+app.use(
+  session({
+    secret: "Hello",
+    resave: true,
+    saveUninitialized: true,
+  })
+);
+```
+
+secret: 세션을 암호화 해줌
+resave: 세션을 항상 저장할지 여부를 정하는 값. (false 권장)
+saveUninitialized: 초기화되지 않은채 스토어에 저장되는 세션
+store: 데이터를 저장되는 형식
+
+### 서버측에서 사용
+
+```js
+req.session.loggedIn = true;
+req.session.user = user;
+```
+
+서버측에서 사용하기 위해선 req.session으로 사용한다.
+위처럼 하면 각 세션에 새로운 객체를 할당할 수 있다.
+
+우리의 response 객체에는 locals가 할당되어있는데, 비어있는 객체이다.  
+pug와 express는 기본적으로 res.locals를 공유하도록 설정되어있다는 것을 기억하자.
+
+미들웨어에서 locals 객체를 설정하면 전역뷰에서 이 locals를 사용할 수 있다.
+
+```js
+export const localsMiddleware = (req, res, nest) => {
+  res.locals.siteName = "Wetube";
+};
+```
+
+이렇게 locals의 객체를 지정해두면, pug에서
+
+```pug
+title #{pageTitle} | #{siteName}
+```
+
+이렇게 사용할 수 있다.(공유한다.)
+
+이 방식을 이용하면 로그인상태를 유지할 수 있는데,
+
+```js
+//로그인 성공하면 세션에 loggedin, user정보 저장
+req.session.loggedIn = true;
+req.session.user = user;
+```
+
+유저가 로그인에 성공하면, 현재 브라우저 세션의 loggedIn과 user 객체에 로그인 정보를 담고,
+
+<br>
+
+```js
+//모든 유저가 브라우저로 요청할때마다 이 미들웨어를 거친다.
+
+export const localsMiddleware = (req, res, next) => {
+  console.log(res.locals);
+  //세션의 정보를 확인해 locals(전역객체)로 정보를 이전.(pug에서사용)
+  res.locals.loggedIn = Boolean(req.session.loggedIn);
+  res.locals.siteName = "Wetube";
+  res.locals.loggedInUser = req.session.user;
+  next();
+};
+```
+
+미들웨어에선 이 정보를 response 객체의 locals로 옮긴다.
+
+pug에서는 locals에 들어있는 객체 자체를 사용할 수 있다.
+
+```pug
+li
+      a(href="/")="HOME"
+
+  if loggedIn
+      li
+          a(href="/login")="LOGOUT"
+
+      li
+          a(href="/profile")=`${loggedInUser.name}'s profile`
+  else
+      li
+          a(href="/join")="JOIN"
+      li
+          a(href="/login")="LOGIN"
+```
+
+## 세션을 db에 저장
+
+세션을 저장하는 장소는 지정하지 않으면 디폴트값으로 memorystore에 저장된다.
+
+따라서, 서버가 재시작될때마다 로그인이 초기화된다.
+
+따라서 db에서 접속데이터를 받을 수 있게하기 위해서
+
+```js
+import session from "express-session";
+import MongoStore from "connect-mongo";
+
+app.use(
+  session({
+    secret: "foo",
+    store: MongoStore.create(options),
+  })
+);
+```
+
+MongoStore를 사용해 DB에 세션을 저장할 수 있게한다.
+
+```js
+app.use(
+  session({
+    secret: "Hello",
+    resave: true,
+    saveUninitialized: true,
+    //session들을 mongodb에 저장하게끔한다. 그리고 세션을 db에 접속해서 받아낼 수 있다.
+    store: MongoStore.create({ mongoUrl: "mongodb://127.0.0.1:~/wetube" }),
+  })
+);
+```
+
+### 세션 초기상태 설정
+
+지금은 세션에 방문하는 모든 사용자들에게 쿠키로 세션id가 부여된다.  
+불필요한 메모리용량을 차지하므로, 비효율적이다.  
+이를 수정하기 위해서 `saveUninitialized`를 `false`로 돌려야한다.
+
+위 옵션은 세션을 수정한 사용자에게만 쿠키를 부여하겠다는 의미이다.  
+현재 postLogin에서 로그인에 성공하면 세션을 수정하기때문에,  
+수정한 세션을 db에 저장하고 쿠키를 넘기겠다는 의미이다.

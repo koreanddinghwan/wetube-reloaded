@@ -3,15 +3,31 @@ doctype html
 html(lang="ko")
     head 
     body 
-        title #{pageTitle} | wetube
+        title #{pageTitle} | #{siteName}
 
         <link rel="stylesheet" href="https://unpkg.com/mvp.css">
 
         #nav 
-            div 
-                a(href="/")="HOME"
-                a(href="/join")="JOIN"
-                a(href="/search")="SEARCH"
+            ul 
+                li
+                    a(href="/")="HOME"
+                
+                if loggedIn 
+                    li  
+                        a(href="/login")="LOGOUT"
+
+                    li 
+                        a(href="/profile")=`${loggedInUser.name}'s profile`
+                else
+                    li
+                        a(href="/join")="JOIN"
+                    li
+                        a(href="/login")="LOGIN"
+
+                li
+                    a(href="/search")="SEARCH"
+                li
+                    a(href="/videos/upload")="UPLOAD?"
 
         #main
             block content
