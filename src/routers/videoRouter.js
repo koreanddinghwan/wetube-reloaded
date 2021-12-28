@@ -6,7 +6,7 @@ import {
   Geteditvideo,
   Posteditvideo,
   Deletevideo,
-} from "../controllers/videocontroller";
+} from "../controllers/videocontroller.js";
 
 const videoRouter = express.Router();
 

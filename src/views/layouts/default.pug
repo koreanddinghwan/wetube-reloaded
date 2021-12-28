@@ -14,7 +14,7 @@ html(lang="ko")
                 
                 if loggedIn 
                     li  
-                        a(href="/login")="LOGOUT"
+                        a(href="/user/logout")="LOGOUT"
 
                     li 
                         a(href="/profile")=`${loggedInUser.name}'s profile`

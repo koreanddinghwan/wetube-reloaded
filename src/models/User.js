@@ -30,9 +30,11 @@ import bcryptjs from "bcryptjs";
 //userdata schema
 const userSchema = new mongoose.Schema({
   email: { type: String, required: true, unique: true },
+  socialOnly: { type: Boolean, default: false },
   username: { type: String, required: true, unique: true },
-  password: { type: String, required: true },
+  password: { type: String, required: false },
   name: { type: String, required: true },
+  avatarUrl: String,
   location: String,
 });
 

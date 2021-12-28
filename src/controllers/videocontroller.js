@@ -1,6 +1,4 @@
-import { red } from "color-name";
-import { async } from "regenerator-runtime";
-import Video from "../models/Videos";
+import Video from "../models/Videos.js";
 
 export const Home = async (req, res) => {
   let videos = [];

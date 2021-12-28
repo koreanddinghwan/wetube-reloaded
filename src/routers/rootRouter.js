@@ -4,8 +4,8 @@ import {
   getLogin,
   postLogin,
   postJoin,
-} from "../controllers/usercontroller";
-import { Home, Search } from "../controllers/videocontroller";
+} from "../controllers/usercontroller.js";
+import { Home, Search } from "../controllers/videocontroller.js";
 
 const rootRouter = express.Router();
 
