@@ -1,4 +1,3 @@
-import express, { application } from "express";
 import User from "../models/User.js";
 import bcryptjs from "bcryptjs";
 import fetch from "node-fetch";
