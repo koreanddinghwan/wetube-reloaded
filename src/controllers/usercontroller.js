@@ -78,8 +78,15 @@ export const Logout = (req, res) => {
   req.session.destroy();
   return res.redirect("/");
 };
-export const Edituser = (req, res) => {
-  return res.render("Edituser");
+
+//유저의 page get요청시 렌더링
+export const getEdit = (req, res) => {
+  return res.render("edit-profile", { pageTitle: "Edit User" });
+};
+
+//유저가 form을 post method로 서버에 수정요청
+export const postEdit = (req, res) => {
+  return res.render("edit-profile");
 };
 export const DeleteUser = (req, res) => {
   return res.render("DeleteUser");

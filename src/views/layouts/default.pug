@@ -14,8 +14,9 @@ html(lang="ko")
                 
                 if loggedIn 
                     li  
+                        a(href="/user/edit")="Edit Profile"
+                    li  
                         a(href="/user/logout")="LOGOUT"
-
                     li 
                         a(href="/profile")=`${loggedInUser.name}'s profile`
                 else
