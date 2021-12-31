@@ -4,7 +4,12 @@ block content
     #edit
         form(method="POST")
             input(name="email", type="text", required, placeholder="email" value=loggedInUser.email)
+                
             input(name="username", type="text", required, placeholder="username" value=loggedInUser.username)
             input(name="name", type="text", required, placeholder="name" value=loggedInUser.name)
             input(name="location", type="text", required, placeholder="location" value=loggedInUser.location)
             input(type="submit" value= "Update Profile", placeholder="submit" )
+            if ErrorMessage
+                span=ErrorMessage
+
+        

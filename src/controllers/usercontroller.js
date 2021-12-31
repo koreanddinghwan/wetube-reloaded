@@ -79,19 +79,6 @@ export const Logout = (req, res) => {
   return res.redirect("/");
 };
 
-//유저의 page get요청시 렌더링
-export const getEdit = (req, res) => {
-  return res.render("edit-profile", { pageTitle: "Edit User" });
-};
-
-//유저가 form을 post method로 서버에 수정요청
-export const postEdit = (req, res) => {
-  return res.render("edit-profile");
-};
-export const DeleteUser = (req, res) => {
-  return res.render("DeleteUser");
-};
-
 export const startGithubLogin = (req, res) => {
   //깃허브로그인버튼 누르면 실행되는 컨트롤러
   const baseUrl = `https://github.com/login/oauth/authorize`;
@@ -199,4 +186,77 @@ export const finishGithubLogin = async (req, res) => {
       return res.redirect("/");
     }
   }
+};
+
+//유저의 page get요청시 렌더링
+export const getEdit = (req, res) => {
+  return res.render("edit-profile", { pageTitle: "Edit User" });
+};
+
+//유저가 form을 post method로 서버에 수정요청
+export const postEdit = async (req, res) => {
+  //id는 req.session.user, email,name...는 req.body에서
+  const {
+    session: {
+      user: { _id },
+    },
+    body: { email, name, username, location },
+  } = req;
+
+  //email과 username은 같으면 안된다. 로직
+  //email과 username은 unique.
+  //post로 form의 정보가 전송된 상태임
+
+  //email과 username이 바뀌었다면, 현재세션의 정보와 post된 정보 비교해 유효성체크해야함
+
+  //email바뀌었을때
+  if (email !== req.session.user.email) {
+    const DbEmail = await User.findOne({ email: email }); //db의 이메일을 찾아서
+    console.log(DbEmail);
+    if (DbEmail) {
+      //있으면 에러
+      console.log("이미있는 이메일");
+      return res.render("edit-profile", {
+        pageTitle: "Edit User",
+        ErrorMessage: "이미 있는 이메일",
+      });
+    }
+  }
+
+  //username바뀌었을때
+  if (username !== req.session.user.username) {
+    const DbUsername = await User.findOne({ username: username });
+    console.log(DbUsername);
+    if (DbUsername) {
+      console.log("이미있는유저이름입니다.");
+      return res.render("edit-profile", {
+        pageTitle: "Edit User",
+        ErrorMessage: "이미 있는 유저이름",
+      });
+    }
+  }
+
+  //안바뀌었다면, 유효성체크할 필요없이 업데이트하면됨
+
+  //Id로 user데이터를 찾고, 2번째 파라미터로 업데이트할 내용주기
+  await User.findByIdAndUpdate(_id, {
+    name,
+    email,
+    username,
+    location,
+  });
+
+  //현재 세션의 정보도 업데이트
+  req.session.user = {
+    ...req.session.user,
+    name,
+    email,
+    username,
+    location,
+  };
+
+  return res.redirect("/user/edit");
+};
+export const DeleteUser = (req, res) => {
+  return res.render("DeleteUser");
 };
