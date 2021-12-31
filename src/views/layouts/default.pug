@@ -19,6 +19,8 @@ html(lang="ko")
                         a(href="/user/logout")="LOGOUT"
                     li 
                         a(href="/profile")=`${loggedInUser.name}'s profile`
+                    li
+                        a(href="/videos/upload")="UPLOAD?"
                 else
                     li
                         a(href="/join")="JOIN"
@@ -27,8 +29,7 @@ html(lang="ko")
 
                 li
                     a(href="/search")="SEARCH"
-                li
-                    a(href="/videos/upload")="UPLOAD?"
+                
 
         #main
             block content

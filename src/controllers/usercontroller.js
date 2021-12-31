@@ -122,7 +122,6 @@ export const finishGithubLogin = async (req, res) => {
 
   //REST API방식으로, POST https://github.com/login/oauth/access_token에 위 정보를 config해서
   //post로 패치하면 액세스 토큰을 받아온다.
-
   const tokenRequest = await (
     await fetch(finalUrl, {
       method: "POST",
@@ -166,7 +165,7 @@ export const finishGithubLogin = async (req, res) => {
       (email) => email.primary === true && email.verified === true
     );
 
-    console.log(emailObj);
+    console.log("email", emailObj);
 
     if (!emailObj) {
       //없으면 로그인페이지로 돌아가
@@ -195,7 +194,9 @@ export const finishGithubLogin = async (req, res) => {
       req.session.user = user;
       return res.redirect("/");
     } else {
-      return res.redirect("/login");
+      req.session.loggedIn = true;
+      req.session.user = user;
+      return res.redirect("/");
     }
   }
 };
