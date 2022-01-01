@@ -12,4 +12,7 @@ block content
             if ErrorMessage
                 span=ErrorMessage
 
+            if  !loggedInUser.socialOnly
+                br
+                a(href="change-password") ChangePassword &rarr;
         

@@ -257,6 +257,49 @@ export const postEdit = async (req, res) => {
 
   return res.redirect("/user/edit");
 };
+
+export const getChangePassword = (req, res) => {
+  if (req.session.user.socialOnly === true) {
+    return res.redirect("/");
+  }
+  return res.render("change-password", { pageTitle: "change Password" });
+};
+
+export const postChangePassword = async (req, res) => {
+  const {
+    session: {
+      user: { _id },
+    },
+    body: { OldPassword, NewPassword, NewPassword_confirm },
+  } = req;
+
+  //현재비밀번호란 확인
+  const user = await User.findById(_id);
+  const ok = await bcryptjs.compare(OldPassword, user.password); //입력된 기존비번과 db의 비밀번호비교
+  if (!ok) {
+    return res.status(400).render("change-password", {
+      pageTitle: "change Password",
+      errorMessage: "현재 비밀번호가 다릅니다.",
+    });
+  }
+
+  //입력된 비밀번호 검증
+  if (NewPassword !== NewPassword_confirm) {
+    return res.status(400).render("change-password", {
+      pageTitle: "change Password",
+      errorMessage: "비밀번화 확인란의 비밀번호가 다릅니다.",
+    });
+  }
+
+  //비밀번호 업데이트
+  //db의 비밀번호 업데이트
+  user.password = NewPassword;
+  await user.save(); //presave 해시함수 미들웨어때문에 저장하면 자동으로 해시함수화된다.
+
+  //세션의 유저 비밀번호는 그대로일 것이므로 초기화해준다.
+  return res.redirect("/user/logout");
+};
+
 export const DeleteUser = (req, res) => {
   return res.render("DeleteUser");
 };
