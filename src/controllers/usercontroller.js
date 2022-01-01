@@ -118,8 +118,6 @@ export const finishGithubLogin = async (req, res) => {
     })
   ).json();
 
-  console.log("토큰", tokenRequest);
-
   // 받아온 access token으로 정보 받아오기
   if ("access_token" in tokenRequest) {
     const { access_token } = tokenRequest;
@@ -134,8 +132,6 @@ export const finishGithubLogin = async (req, res) => {
       })
     ).json(); //await fetch~ await json
 
-    console.log("test", userData);
-
     const emailData = await (
       await fetch(`${apiUrl}/user/emails`, {
         headers: {
@@ -145,14 +141,10 @@ export const finishGithubLogin = async (req, res) => {
       })
     ).json();
 
-    console.log(emailData);
-
     //parimary와 verified가 true인 이메일만 받아온다.
     const emailObj = emailData.find(
       (email) => email.primary === true && email.verified === true
     );
-
-    console.log("email", emailObj);
 
     if (!emailObj) {
       //없으면 로그인페이지로 돌아가
@@ -198,10 +190,12 @@ export const postEdit = async (req, res) => {
   //id는 req.session.user, email,name...는 req.body에서
   const {
     session: {
-      user: { _id },
+      user: { _id, avatarUrl },
     },
     body: { email, name, username, location },
+    file,
   } = req;
+  console.log("파일정보", file);
 
   //email과 username은 같으면 안된다. 로직
   //email과 username은 unique.
@@ -240,6 +234,7 @@ export const postEdit = async (req, res) => {
 
   //Id로 user데이터를 찾고, 2번째 파라미터로 업데이트할 내용주기
   await User.findByIdAndUpdate(_id, {
+    avatarUrl: file ? file.path : avatarUrl,
     name,
     email,
     username,

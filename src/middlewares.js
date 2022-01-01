@@ -1,3 +1,5 @@
+import multer from "multer";
+
 // 현재 로그인된 사용자의 정보를 세션으로부터 받아서 locals 전역객체에 저장하는 미들웨어
 export const localsMiddleware = (req, res, next) => {
   //세션의 정보를 확인해 locals(전역객체)로 정보를 이전.(pug에서사용)
@@ -27,3 +29,6 @@ export const publicOnlyMiddleware = (req, res, next) => {
     return res.redirect("/");
   }
 };
+
+//
+export const uploadFiles = multer({ dest: "uploads/" });
