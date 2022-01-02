@@ -1,4 +1,5 @@
 import Video from "../models/Videos.js";
+import User from "../models/User.js";
 
 export const Home = async (req, res) => {
   let videos = [];
@@ -11,8 +12,10 @@ export const Home = async (req, res) => {
 };
 export const Watchvideo = async (req, res) => {
   const { id } = req.params;
+
   try {
-    const video = await Video.findById(id);
+    const video = await Video.findById(id).populate("owner");
+
     res.render("Watchvideo", { pageTitle: "Watch", video });
   } catch {
     return res.status(404).render("404", { pageTitle: "404" });
@@ -24,6 +27,9 @@ export const Getuploadvideo = (req, res) => {
 };
 export const Postuploadvideo = async (req, res) => {
   const file = req.file;
+  const {
+    user: { _id },
+  } = req.session;
 
   const { title, description, hashtags } = req.body;
   try {
@@ -31,6 +37,7 @@ export const Postuploadvideo = async (req, res) => {
       title,
       description,
       fileUrl: file.path,
+      owner: _id,
       hashtags: Video.formatHashtags(hashtags),
     });
     return res.redirect("/");
