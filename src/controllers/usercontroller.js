@@ -7,27 +7,22 @@ export const getJoin = (req, res) => {
   return res.render("join", { pageTitle: "JOIN" });
 };
 export const postJoin = async (req, res) => {
-  const { name, username, email, password, confirmpassword, location } =
-    req.body;
+  const { name, username, email, password, password2, location } = req.body;
   const pageTitle = "Join";
-
-  //password check
-  if (password !== confirmpassword) {
-    return res.status(400).render(pageTitle, {
+  console.log(req.body);
+  if (password !== password2) {
+    return res.status(400).render("join", {
       pageTitle,
-      errorMessage: "password not true",
+      errorMessage: "Password confirmation does not match.",
     });
   }
-  //username/email check
-  const exist = await User.exists({ $or: [{ username }, { email }] });
-  if (exist) {
-    return res.status(400).render(pageTitle, {
+  const exists = await User.exists({ $or: [{ username }, { email }] });
+  if (exists) {
+    return res.status(400).render("join", {
       pageTitle,
-      errorMessage: "username/email already exists",
+      errorMessage: "This username/email is already taken.",
     });
   }
-
-  //db생성
   try {
     await User.create({
       name,
@@ -38,8 +33,9 @@ export const postJoin = async (req, res) => {
     });
     return res.redirect("/login");
   } catch (error) {
-    return res.status(400).render(pageTitle, {
-      pageTitle,
+    console.log(error);
+    return res.status(400).render("join", {
+      pageTitle: "Upload Video",
       errorMessage: error._message,
     });
   }
@@ -158,7 +154,6 @@ export const finishGithubLogin = async (req, res) => {
     if (!user) {
       const user = await User.create({
         avatarUrl: userData.avatar_url,
-        name: userData.name,
         username: userData.login,
         email: emailObj.email,
         password: "",
