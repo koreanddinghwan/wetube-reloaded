@@ -10,6 +10,7 @@ const userSchema = new mongoose.Schema({
   name: { type: String, required: true },
   avatarUrl: String,
   location: String,
+  videos: [{ type: mongoose.Schema.Types.ObjectId, ref: "Video" }],
 });
 
 //유저가 create한 password를 저장하기전에 hash화한다.
