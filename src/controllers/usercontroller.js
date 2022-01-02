@@ -233,22 +233,19 @@ export const postEdit = async (req, res) => {
   //안바뀌었다면, 유효성체크할 필요없이 업데이트하면됨
 
   //Id로 user데이터를 찾고, 2번째 파라미터로 업데이트할 내용주기
-  await User.findByIdAndUpdate(_id, {
-    avatarUrl: file ? file.path : avatarUrl,
-    name,
-    email,
-    username,
-    location,
-  });
+  const updatedUser = await User.findByIdAndUpdate(
+    _id,
+    {
+      avatarUrl: file ? file.path : avatarUrl,
+      name,
+      email,
+      username,
+      location,
+    },
+    { new: true }
+  );
 
-  //현재 세션의 정보도 업데이트
-  req.session.user = {
-    ...req.session.user,
-    name,
-    email,
-    username,
-    location,
-  };
+  req.session.user = updatedUser;
 
   return res.redirect("/user/edit");
 };

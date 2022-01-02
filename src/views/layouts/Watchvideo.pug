@@ -4,6 +4,7 @@ extends default.pug
 block content 
     #videos 
         h1=video.title
+        video(src="/" + video.fileUrl, controls)
         div 
             small=video.meta.views
             small=video.meta.rating
