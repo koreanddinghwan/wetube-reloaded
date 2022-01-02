@@ -18,7 +18,7 @@ html(lang="ko")
                     li  
                         a(href="/user/logout")="LOGOUT"
                     li 
-                        a(href="/profile")=`${loggedInUser.name}'s profile`
+                        a(href=`/user/${loggedInUser._id}`)=`${loggedInUser.name}'s profile`
                     li
                         a(href="/videos/upload")="UPLOAD?"
                 else

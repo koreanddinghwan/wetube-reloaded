@@ -71,9 +71,7 @@ export const postLogin = async (req, res) => {
   req.session.user = user;
   return res.redirect("/");
 };
-export const Seeuser = (req, res) => {
-  return res.render("Seeuser");
-};
+
 export const Logout = (req, res) => {
   req.session.destroy();
   return res.redirect("/");
@@ -292,6 +290,11 @@ export const postChangePassword = async (req, res) => {
   return res.redirect("/user/logout");
 };
 
-export const DeleteUser = (req, res) => {
-  return res.render("DeleteUser");
+export const seeuser = async (req, res) => {
+  const { id } = req.params;
+  const user = await User.findById(id);
+  if (!user) {
+    return res.status(404).render("404", { pageTitle: "usernotfound" });
+  }
+  return res.render("profile", { pageTitle: user.name, user });
 };

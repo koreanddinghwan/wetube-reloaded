@@ -1,6 +1,6 @@
 import express from "express";
 import {
-  Seeuser,
+  seeuser,
   Logout,
   getEdit,
   postEdit,
@@ -30,6 +30,7 @@ userRouter
   .all(protectorMiddleware)
   .get(getChangePassword)
   .post(postChangePassword);
-userRouter.get("/:id", Seeuser);
+
+userRouter.get("/:id", seeuser);
 
 export default userRouter;
