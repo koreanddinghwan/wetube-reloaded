@@ -1,0 +1,10 @@
+@import "./vairables";
+
+div {
+  background-color: red;
+  color: white;
+}
+
+body {
+  background-color: $red;
+}

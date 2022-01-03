@@ -2,11 +2,10 @@
 doctype html 
 html(lang="ko")
     head 
-    body 
         title #{pageTitle} | #{siteName}
-
         <link rel="stylesheet" href="https://unpkg.com/mvp.css">
 
+    body 
         #nav 
             ul 
                 li
@@ -31,7 +30,7 @@ html(lang="ko")
                     a(href="/search")="SEARCH"
                 
 
-        #main
+        main
             block content
-
-    include ../includes/footer.pug
+        include ../includes/footer.pug
+    script(src="/static/js/main.js")
