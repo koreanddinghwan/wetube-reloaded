@@ -2,9 +2,10 @@
 
 div {
   background-color: red;
-  color: white;
+  color: $color;
 }
 
 body {
   background-color: $red;
+  color: $gray;
 }

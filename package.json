@@ -4,8 +4,8 @@
   "description": "Youtube clone with nodejs, express, pug, scss",
   "main": "index.js",
   "scripts": {
-    "dev": "nodemon --exec babel-node src/init.js",
-    "assets": "webpack --config webpack.config.cjs"
+    "dev:server": "nodemon",
+    "dev:assets": "webpack"
   },
   "repository": {
     "type": "git",
@@ -37,6 +37,7 @@
     "@babel/node": "^7.16.5",
     "@babel/preset-env": "^7.16.5",
     "css-loader": "^6.5.1",
+    "mini-css-extract-plugin": "^2.4.5",
     "nodemon": "^2.0.15",
     "sass": "^1.45.2",
     "sass-loader": "^12.4.0",
