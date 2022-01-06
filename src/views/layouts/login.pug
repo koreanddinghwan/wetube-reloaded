@@ -12,12 +12,8 @@ block content
                 input(type="text" name="password" required placeholder="Your password here")
                 input(type="submit" value="로그인")
                 br
-                a(href="/user/github/start") Continue with github
-            
 
-        hr
-        div 
-            span Don't Have an Account?
-            a(href="/join") Create now &rarr;
-            
-        
+                include ../includes/social-login
+            div.auth-switch 
+                span Don't have an account?
+                a(href="/join") Create one now &rarr;

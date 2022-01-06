@@ -2,9 +2,11 @@ extends default.pug
 include ../mixins/videos
 
 block content 
-    h1 hello
-
-    each video in user.videos
-        +videos(video)
-    else 
-        li sorry not found
+    div.profile__data
+        img(src=`/${user.avatarUrl}`).avatar
+        h3=user.name
+    div.video-grid
+        each video in user.videos
+            +videos(video)
+        else
+            span.empty__message No videos found

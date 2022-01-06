@@ -1258,3 +1258,26 @@ postRequest에 file이 없으면 기존 avatarUrl을 유지하면된다.
 
 가장 중요한건 DB에는 파일을 직접 저장하면 안된다는 것이다.
 DB에는 그 파일의 path만 저장한다.
+
+# 9
+
+webpack은 다양한 형태의 파일들을 하나의 js파일로 만들어주는 역할을 한다.
+
+script 명령어에 assets 로 `"assets": "webpack --config webpack.config.cjs"`를 넣어주고,  
+webpack config를 설정해주자.
+
+webpack config에서 entry에 우리가 제공할 js파일을,  
+그리고 ouput으로 내보낼 파일의 경로와 파일 이름을 설정한다.
+
+이때 사용할 모듈은 js파일에는 babel-loader를,  
+scss파일에는 sassloader로 scss파일을 불러오고, css파일로 변환하고, 이를 JS돔에 주입한다.
+
+use는 역순임을 기억하자.
+
+## 9.5
+
+js가 로드되기전에 css를 적용하고싶으면 MiniCssExtractplugin을 사용한다.
+
+styleloader 대신 위 플러그인을 사용해 css파일을 개별추출해내자.
+
+main.css 파일이 assets 폴더 내에 생기는 것을 볼 수 있다.

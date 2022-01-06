@@ -1,20 +1,19 @@
 extends default.pug 
 
 block content
-    #edit
-        img(src="/" + loggedInUser.avatarUrl, width="100", height="100")
-        form(method="POST", enctype="multipart/form-data")
-            label(for="avatar") Avatar
-            input(type="file", id="avatar",accept="image/*", name="avatar")
-            input(placeholder="Name", name="name", type="text", required, value=loggedInUser.name)
-            input(placeholder="Email", name="email", type="email", required, value=loggedInUser.email)
-            input(placeholder="Username", name="username", type="text", required, value=loggedInUser.username)
-            input(placeholder="Location", name="location", type="text", required, value=loggedInUser.location)
-            input(type="submit", value="Update Profile")
-            if ErrorMessage
-                span=ErrorMessage
+    
+    form(method="POST", enctype="multipart/form-data").edit-profile_form
+        label(for="avatar") Avatar
+        input(type="file", id="avatar",accept="image/*", name="avatar")
+        input(placeholder="Name", name="name", type="text", required, value=loggedInUser.name)
+        input(placeholder="Email", name="email", type="email", required, value=loggedInUser.email)
+        input(placeholder="Username", name="username", type="text", required, value=loggedInUser.username)
+        input(placeholder="Location", name="location", type="text", required, value=loggedInUser.location)
+        input(type="submit", value="Update Profile")
+        if ErrorMessage
+            span=ErrorMessage
 
-            if  !loggedInUser.socialOnly
-                br
-                a(href="change-password") ChangePassword &rarr;
-        
+        if  !loggedInUser.socialOnly
+            div.edit-profile__password
+                a(href="change-password") Change Password &rarr;
+    
