@@ -12,6 +12,10 @@ const fullScreenBtn = document.getElementById("fullscreen");
 
 const videoContainer = document.getElementById("videoContainer");
 
+const videoControls = document.getElementById("videoControls");
+
+let controlsMovementTimeout = null;
+let controlsTimeout = null;
 let volumeValue = 0.5; //볼륨값 저장변수
 video.volume = volumeValue;
 
@@ -79,6 +83,31 @@ const handleClickScreen = (e) => {
   }
 };
 
+const handleMouseMove = (e) => {
+  if (controlsTimeout) {
+    //leave의 timeout 취소
+    clearTimeout(controlsTimeout);
+    controlsTimeout = null;
+  }
+  videoControls.classList.add("showing");
+
+  if (controlsMovementTimeout) {
+    //timeout이벤트 취소
+    clearTimeout(controlsMovementTimeout);
+    controlsMovementTimeout = null;
+  }
+  controlsMovementTimeout = setTimeout(() => {
+    //timeout시작
+    videoControls.classList.remove("showing");
+  }, 3000);
+};
+
+const handleMouseLeave = (e) => {
+  controlsTimeout = setTimeout(() => {
+    videoControls.classList.remove("showing");
+  }, 3000);
+};
+
 playBtn.addEventListener("click", handlePlayClick);
 muteBtn.addEventListener("click", handleMuteClick);
 volumeRange.addEventListener("input", handleVolumnChange);
@@ -86,3 +115,5 @@ video.addEventListener("loadedmetadata", handleLooadedMetaData);
 video.addEventListener("timeupdate", handleTimeUpdate);
 timeLine.addEventListener("input", handleTimelineChange);
 fullScreenBtn.addEventListener("click", handleClickScreen);
+video.addEventListener("mousemove", handleMouseMove);
+video.addEventListener("mouseleave", handleMouseLeave);
