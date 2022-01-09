@@ -8,6 +8,10 @@ const totalTime = document.getElementById("totalTime");
 
 const timeLine = document.getElementById("timeline");
 
+const fullScreenBtn = document.getElementById("fullscreen");
+
+const videoContainer = document.getElementById("videoContainer");
+
 let volumeValue = 0.5; //볼륨값 저장변수
 video.volume = volumeValue;
 
@@ -63,9 +67,22 @@ const handleTimelineChange = (e) => {
   video.currentTime = value;
 };
 
+const handleClickScreen = (e) => {
+  const fullScreen = document.fullscreenElement;
+
+  if (fullScreen) {
+    document.exitFullscreen();
+    fullScreenBtn.innerText = "enter full screen";
+  } else {
+    videoContainer.requestFullscreen();
+    fullScreenBtn.innerText = "exit";
+  }
+};
+
 playBtn.addEventListener("click", handlePlayClick);
 muteBtn.addEventListener("click", handleMuteClick);
 volumeRange.addEventListener("input", handleVolumnChange);
 video.addEventListener("loadedmetadata", handleLooadedMetaData);
 video.addEventListener("timeupdate", handleTimeUpdate);
 timeLine.addEventListener("input", handleTimelineChange);
+fullScreenBtn.addEventListener("click", handleClickScreen);
