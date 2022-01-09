@@ -6,6 +6,8 @@ const video = document.querySelector("video");
 const currentTime = document.getElementById("currentTime");
 const totalTime = document.getElementById("totalTime");
 
+const timeLine = document.getElementById("timeline");
+
 let volumeValue = 0.5; //볼륨값 저장변수
 video.volume = volumeValue;
 
@@ -46,10 +48,19 @@ const formatTime = (seconds) => {
 
 const handleLooadedMetaData = (e) => {
   totalTime.innerText = formatTime(Math.floor(video.duration));
+  timeLine.max = Math.floor(video.duration);
 };
 
 const handleTimeUpdate = (e) => {
   currentTime.innerText = formatTime(Math.floor(video.currentTime));
+  timeLine.value = Math.floor(video.currentTime);
+};
+
+const handleTimelineChange = (e) => {
+  const {
+    target: { value },
+  } = e;
+  video.currentTime = value;
 };
 
 playBtn.addEventListener("click", handlePlayClick);
@@ -57,3 +68,4 @@ muteBtn.addEventListener("click", handleMuteClick);
 volumeRange.addEventListener("input", handleVolumnChange);
 video.addEventListener("loadedmetadata", handleLooadedMetaData);
 video.addEventListener("timeupdate", handleTimeUpdate);
+timeLine.addEventListener("input", handleTimelineChange);
