@@ -7,6 +7,7 @@ import videoRouter from "./routers/videoRouter.js";
 import userRouter from "./routers/userRouter.js";
 import { localsMiddleware } from "./middlewares.js";
 import "dotenv/config";
+import apiRouter from "./routers/apiRouter.js";
 const { COOKIE_SECRET, DB_URL } = process.env;
 
 const app = express();
@@ -40,5 +41,6 @@ app.use("/static", express.static("assets"));
 app.use("/", rootRouter);
 app.use("/videos", videoRouter);
 app.use("/user", userRouter);
+app.use("/api", apiRouter);
 
 export default app;
