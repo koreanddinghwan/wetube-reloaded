@@ -1,11 +1,9 @@
 extends default.pug
 
 block content 
-    h2 #{pageTitle}
     if errorMessage 
         span=errorMessage
     #login-form
-        h3 Login here
         div 
             form(method="POST")
                 input(type="text" name="username" required placeholder="Your id here")

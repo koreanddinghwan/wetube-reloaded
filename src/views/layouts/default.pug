@@ -6,9 +6,10 @@ html(lang="ko")
         link(rel="stylesheet", href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css")
         link(rel="stylesheet" href="/static/css/styles.css")
 
-    body 
-        include ../includes/headers
+    body
+        include ../includes/headers.pug                
         main
             block content
-        include ../includes/footer.pug
+        include ../includes/footer
+    script(src="/static/js/main.js") 
     block scripts
