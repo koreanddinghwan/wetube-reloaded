@@ -2,11 +2,10 @@ extends default.pug
 
 block content 
     div
+        video#preview
         button#startBtn start recording
 
     #upload 
-        h1 upload your video
-
         if errormessage 
             span=errormessage
 
