@@ -1,6 +1,8 @@
 extends default.pug 
 
 block content 
+    div
+        button#startBtn start recording
 
     #upload 
         h1 upload your video
@@ -15,3 +17,7 @@ block content
             input(name="description" type="text" placeholder="description" required minlength=10)
             input(name="hashtags" type="text" placeholder="hashtags" required)
             input(type="submit")
+
+
+block scripts
+    script(src="/static/js/recorder.js") 
