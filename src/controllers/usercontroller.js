@@ -1,6 +1,7 @@
 import User from "../models/User.js";
 import bcryptjs from "bcryptjs";
 import fetch from "node-fetch";
+import flash from "express-flash";
 
 export const getJoin = (req, res) => {
   return res.render("join", { pageTitle: "JOIN" });
@@ -70,8 +71,8 @@ export const postLogin = async (req, res) => {
 };
 
 export const Logout = (req, res) => {
-  req.session.destroy();
   req.flash("info", "Bye");
+  req.session.destroy();
   return res.redirect("/");
 };
 
