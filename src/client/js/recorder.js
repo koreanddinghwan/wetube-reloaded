@@ -104,7 +104,7 @@ const init = async () => {
     stream = await navigator.mediaDevices.getUserMedia({
       //카메라, 마이크 등의 컴퓨터의 미디어장비에 접근
       audio: false,
-      video: { width: 200, height: 100 },
+      video: { width: 1024, height: 576 },
     }); //0과 1로된 데이터를 만들어줌
     console.log(stream);
     video.srcObject = stream; //video태그에 srcObject프로퍼티로 stream을 넣어준다.

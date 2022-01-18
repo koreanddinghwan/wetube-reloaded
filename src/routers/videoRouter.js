@@ -16,7 +16,10 @@ videoRouter
   .route("/upload")
   .all(protectorMiddleware) //로그인시에만가능
   .get(Getuploadvideo)
-  .post(videoUpload.single("video"), Postuploadvideo);
+  .post(
+    videoUpload.fields([{ name: "video" }, { name: "thumb" }]),
+    Postuploadvideo
+  );
 videoRouter.get("/:id([0-9a-f]{24})", Watchvideo);
 videoRouter
   .route("/:id([0-9a-f]{24})/edit")

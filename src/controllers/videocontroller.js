@@ -29,7 +29,8 @@ export const Getuploadvideo = (req, res) => {
   return res.render("upload", { pageTitle: "upload" });
 };
 export const Postuploadvideo = async (req, res) => {
-  const file = req.file;
+  const { video, thumb } = req.files;
+
   const {
     user: { _id },
   } = req.session;
@@ -39,7 +40,8 @@ export const Postuploadvideo = async (req, res) => {
     const newVideo = await Video.create({
       title,
       description,
-      fileUrl: file.path,
+      fileUrl: video[0].path,
+      thumbUrl: thumb[0].path,
       owner: _id,
       hashtags: Video.formatHashtags(hashtags),
     });
