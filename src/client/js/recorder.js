@@ -7,6 +7,7 @@ let stream;
 let recorder;
 let videoFile;
 let mp4Url;
+let thumbUrl;
 
 const handleDownload = async () => {
   try {
@@ -16,10 +17,24 @@ const handleDownload = async () => {
     ffmpeg.FS("writeFile", "recording.webm", await fetchFile(videoFile));
 
     await ffmpeg.run("-i", "recording.webm", "-r", "60", "output.mp4");
+    await ffmpeg.run(
+      "-i",
+      "recording.webm",
+      "-ss",
+      "00:00:01",
+      "-frames:v",
+      "1",
+      "thumbnail.jpg"
+    );
 
     const mp4File = ffmpeg.FS("readFile", "output.mp4");
+    const thumbFile = ffmpeg.FS("readFile", "thumbnail.jpg");
+
     const mp4Blob = new Blob([mp4File.buffer], { type: "video/mp4" });
+    const thumbBlob = new Blob([thumbFile.buffer], { type: "image/jpg" });
+
     mp4Url = URL.createObjectURL(mp4Blob);
+    thumbUrl = URL.createObjectURL(thumbBlob);
   } catch (e) {
     console.log(e);
   }
@@ -28,6 +43,12 @@ const handleDownload = async () => {
   a.download = "MyRecording.mp4"; //a태그은 download프로퍼티 가진다.
   document.body.appendChild(a);
   a.click(); //브라우저상에서 클릭
+
+  const thumbA = document.createElement("a");
+  thumbA.href = thumbUrl;
+  thumbA.download = "Mythumbnail.jpg"; //a태그은 download프로퍼티 가진다.
+  document.body.appendChild(thumbA);
+  thumbA.click(); //브라우저상에서 클릭
 };
 
 const handleStop = () => {
