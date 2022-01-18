@@ -71,6 +71,7 @@ export const postLogin = async (req, res) => {
 
 export const Logout = (req, res) => {
   req.session.destroy();
+  req.flash("info", "Bye");
   return res.redirect("/");
 };
 
@@ -246,6 +247,7 @@ export const postEdit = async (req, res) => {
 
 export const getChangePassword = (req, res) => {
   if (req.session.user.socialOnly === true) {
+    req.flash("error", "깃허브 계정은 못바꿈");
     return res.redirect("/");
   }
   return res.render("change-password", { pageTitle: "change Password" });
@@ -281,6 +283,8 @@ export const postChangePassword = async (req, res) => {
   //db의 비밀번호 업데이트
   user.password = NewPassword;
   await user.save(); //presave 해시함수 미들웨어때문에 저장하면 자동으로 해시함수화된다.
+
+  req.flash("info", "다시 로그인해줴숑");
 
   //세션의 유저 비밀번호는 그대로일 것이므로 초기화해준다.
   return res.redirect("/user/logout");

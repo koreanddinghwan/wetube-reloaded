@@ -108,6 +108,7 @@ export const Deletevideo = async (req, res) => {
   }
 
   if (String(video.owner) !== String(_id)) {
+    req.flash("error", "권한이 없습니다");
     return res.status(403).redirect("/");
   }
   await Video.deleteOne({ id });

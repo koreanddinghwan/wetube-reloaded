@@ -9,6 +9,7 @@ import { localsMiddleware } from "./middlewares.js";
 import "dotenv/config";
 import apiRouter from "./routers/apiRouter.js";
 const { COOKIE_SECRET, DB_URL } = process.env;
+import flash from "express-flash";
 
 const app = express();
 app.use(morgan("dev"));
@@ -40,7 +41,7 @@ app.use(
     store: MongoStore.create({ mongoUrl: process.env.DB_URL }),
   })
 );
-
+app.use(flash());
 app.use(localsMiddleware);
 app.use("/uploads", express.static("uploads"));
 app.use("/static", express.static("assets"));

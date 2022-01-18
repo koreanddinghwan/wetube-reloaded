@@ -16,6 +16,7 @@ export const protectorMiddleware = (req, res, next) => {
     //브라우저 세션에 로그인정보잇으면
     next();
   } else {
+    req.flash("error", "권한이 없습니다");
     return res.redirect("/"); //없으면
   }
 };
@@ -26,6 +27,7 @@ export const publicOnlyMiddleware = (req, res, next) => {
     //브라우저 세션에 로그인정보없으면
     return next();
   } else {
+    req.flash("error", "권한이 없습니다");
     return res.redirect("/");
   }
 };
