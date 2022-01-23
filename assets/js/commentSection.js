@@ -16,7 +16,7 @@
   \*****************************************/
 /***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) => {
 
-eval("__webpack_require__.r(__webpack_exports__);\nvar videoContainer = document.getElementById(\"videoContainer\");\nvar form = document.getElementById(\"commentForm\");\nvar textarea = form.querySelector(\"textarea\");\nvar btn = form.querySelector(\"button\");\n\nvar handleSubmit = function handleSubmit(e) {\n  e.preventDefault();\n  var text = textarea.value;\n  var video = videoContainer.dataset.id; //videocontainer의 dataset프로퍼티이용\n};\n\nform.addEventListener(\"submit\", handleSubmit);\n\n//# sourceURL=webpack://wetube/./src/client/js/commentSection.js?");
+eval("__webpack_require__.r(__webpack_exports__);\nvar videoContainer = document.getElementById(\"videoContainer\");\nvar form = document.getElementById(\"commentForm\");\n\nvar handleSubmit = function handleSubmit(e) {\n  e.preventDefault();\n  var textarea = form.querySelector(\"textarea\");\n  var text = textarea.value;\n  var videoId = videoContainer.dataset.videoid; //videocontainer의 dataset프로퍼티이용\n\n  fetch(\"/api/videos/\".concat(videoId, \"/comment\"), {\n    method: \"POST\",\n    body: {\n      text: text\n    }\n  });\n};\n\nif (form) {\n  form.addEventListener(\"submit\", handleSubmit);\n}\n\n//# sourceURL=webpack://wetube/./src/client/js/commentSection.js?");
 
 /***/ })
 

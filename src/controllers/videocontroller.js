@@ -1,6 +1,7 @@
 import Video from "../models/Videos.js";
 import User from "../models/User.js";
 import flash from "express-flash";
+import { async } from "regenerator-runtime";
 
 export const Home = async (req, res) => {
   let videos = [];
@@ -145,4 +146,10 @@ export const registerView = async (req, res) => {
   await video.save();
 
   return res.sendStatus(200);
+};
+
+export const createComment = async (req, res) => {
+  const text = req.body.text;
+  console.log(req.body);
+  res.end();
 };
