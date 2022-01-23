@@ -23,8 +23,9 @@ app.use((req, res, next) => {
   next();
 });
 
-app.use(express.urlencoded({ extended: true }));
-app.use(express.json());
+app.use(express.urlencoded({ extended: true })); //서버가 form데이터 주고받게해주는 미들웨어
+
+app.use(express.json()); //string을 받아서 객체로 바꿔주는 미들웨어
 
 //세션 미들웨어 사용
 app.use(

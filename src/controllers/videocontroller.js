@@ -1,4 +1,5 @@
 import Video from "../models/Videos.js";
+import Comment from "../models/Comment.js";
 import User from "../models/User.js";
 import flash from "express-flash";
 import { async } from "regenerator-runtime";
@@ -149,7 +150,25 @@ export const registerView = async (req, res) => {
 };
 
 export const createComment = async (req, res) => {
-  const text = req.body.text;
-  console.log(req.body);
-  res.end();
+  const {
+    body: { text },
+    params: { id },
+    session: { user },
+  } = req;
+  console.log(text);
+  console.log(id);
+  console.log(user);
+
+  const video = await Video.findById(id);
+  if (!video) {
+    return res.sendStatus(404);
+  }
+
+  const comment = await Comment.create({
+    text,
+    owner: user._id,
+    video: id,
+  });
+
+  return res.sendStatus(201);
 };
