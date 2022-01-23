@@ -20,7 +20,9 @@ export const Watchvideo = async (req, res) => {
   const { id } = req.params;
 
   try {
-    const video = await Video.findById(id).populate("owner");
+    const video = await Video.findById(id)
+      .populate("owner")
+      .populate("comments");
 
     res.render("Watchvideo", { pageTitle: "Watch", video });
   } catch {
@@ -169,6 +171,7 @@ export const createComment = async (req, res) => {
     owner: user._id,
     video: id,
   });
-
+  video.comments.push(comment._id);
+  video.save();
   return res.sendStatus(201);
 };
