@@ -3,7 +3,23 @@ import { async } from "regenerator-runtime";
 const videoContainer = document.getElementById("videoContainer");
 const form = document.getElementById("commentForm");
 
+const addComment = (text) => {
+  const videoComments = document.querySelector(".video__comments ul");
+  const newComment = document.createElement("li");
+  newComment.className = "video__comment";
+  const icon = document.createElement("i");
+  icon.classList = "fas fa-comment";
+  const span = document.createElement("span");
+  span.innerText = ` ${text}`;
+  const span2 = document.createElement("span");
+  newComment.appendChild(icon);
+  newComment.appendChild(span);
+
+  videoComments.prepend(newComment);
+};
+
 const handleSubmit = async (e) => {
+  e.preventDefault();
   const textarea = form.querySelector("textarea");
 
   const text = textarea.value;
@@ -13,7 +29,7 @@ const handleSubmit = async (e) => {
     return;
   }
 
-  await fetch(`/api/videos/${videoId}/comment`, {
+  const { status } = await fetch(`/api/videos/${videoId}/comment`, {
     method: "POST",
     headers: {
       //request의 정보를 담는다.
@@ -23,7 +39,10 @@ const handleSubmit = async (e) => {
   });
 
   textarea.value = "";
-  window.location.reload();
+  if (status === 201) {
+    console.log("create fake comment");
+    addComment(text);
+  }
 };
 
 if (form) {
