@@ -1,3 +1,4 @@
+import "regenerator-runtime";
 import "./db.js";
 import "./models/Videos.js"; //init에서 삽입
 import "./models/User.js";
