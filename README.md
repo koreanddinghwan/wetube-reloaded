@@ -290,7 +290,8 @@ protection middleware는
 middleware 모듈, nodejs용 request logger middleware임.
 
 morgan 함수를 호출하면 설정한대로 middleware를 리턴한다.  
-morgan()함수의 괄호 안에는 "dev", "combined" 등등 여러 기능을 가진 middleware를 리턴한다.
+morgan()함수의 괄호 안에는 "dev", "combined" 등등 여러 기능을 가진 middleware를 리턴한다.  
+요청이 온메서드, 응답속도 등에 대해 보고해준다.
 
 # 4.0router
 
